@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jafar Tools | أدواتك المجانية</title>
+<meta name="description" content="أدوات مجانية لتنسيق النصوص وتوليد الكلمات وكلمات المرور.">
+<style>
+:root {
+  --bg:#0b1020;
+  --panel:#141c30;
+  --panel2:#1b2740;
+  --text:#f4f7ff;
+  --muted:#9eacc7;
+  --accent:#8b7cff;
+  --border:#293653;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;
+  line-height:1.8;
+}
+header {
+  padding:24px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  gap:12px;
+}
+.logo { font-size:24px; font-weight:bold; }
+.logo span { color:var(--accent); }
+header a { color:var(--muted); text-decoration:none; }
+.hero {
+  text-align:center;
+  padding:65px 20px 35px;
+}
+.hero h1 { font-size:clamp(30px,5vw,48px); margin:0 0 12px; }
+.hero h1 span { color:var(--accent); }
+.hero p { color:var(--muted); max-width:600px; margin:auto; }
+.container { width:min(1050px,92%); margin:auto; }
+.search {
+  width:100%; padding:15px; border-radius:12px;
+  border:1px solid var(--border); background:var(--panel);
+  color:var(--text); font-size:16px; margin:25px 0;
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));
+  gap:18px; padding-bottom:45px;
+}
+.card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px; padding:22px;
+}
+.card h2 { font-size:20px; margin:0 0 5px; }
+.card p { color:var(--muted); font-size:14px; }
+.emoji { font-size:30px; margin-bottom:8px; }
+textarea, input, select {
+  width:100%; background:#0d1528; color:var(--text);
+  border:1px solid var(--border); border-radius:10px;
+  padding:12px; margin:7px 0; font:inherit;
+}
+textarea { min-height:115px; resize:vertical; }
+button {
+  border:0; background:var(--accent); color:white;
+  padding:11px 16px; border-radius:10px;
+  cursor:pointer; font:inherit; font-weight:bold;
+  margin:5px 3px 5px 0;
+}
+button:hover { filter:brightness(1.12); }
+.secondary { background:var(--panel2); border:1px solid var(--border); }
+.result {
+  background:#0d1528; border:1px solid var(--border);
+  padding:12px; border-radius:10px; overflow-wrap:anywhere;
+  white-space:pre-wrap; min-height:44px; margin-top:10px;
+}
+.small { font-size:12px; color:var(--muted); }
+footer {
+  text-align:center; padding:25px; color:var(--muted);
+  border-top:1px solid var(--border);
+}
+[hidden] { display:none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Jafar <span>Tools</span></div>
+  <a href="#tools">كل الأدوات ↓</a>
+</header>
+
+<section class="hero">
+  <h1>أدواتك اليومية، <span>بمكان واحد</span></h1>
+  <p>أدوات مجانية وسهلة تساعدك تنجز شغلك بسرعة، بدون تسجيل حساب.</p>
+</section>
+
+<main class="container" id="tools">
+  <input class="search" id="search" placeholder="🔎 ابحث عن أداة..." aria-label="ابحث عن أداة">
+
+  <div class="grid">
+
+    <section class="card" data-name="عداد كلمات حروف نص">
+      <div class="emoji">📝</div>
+      <h2>عداد الكلمات والحروف</h2>
+      <p>احسب عدد الكلمات والحروف في أي نص.</p>
+      <textarea id="countText" placeholder="اكتب أو الصق النص هنا..."></textarea>
+      <div class="result" id="countResult" aria-live="polite">الكلمات: 0 | الحروف: 0</div>
+    </section>
+
+    <section class="card" data-name="تنسيق النصوص تكبير تصغير تنظيف">
+      <div class="emoji">✨</div>
+      <h2>منسّق النصوص</h2>
+      <p>نظّف المسافات أو غيّر حالة الأحرف الإنجليزية.</p>
+      <textarea id="formatText" placeholder="ضع النص الذي تريد تنسيقه..."></textarea>
+      <button onclick="format('clean')">تنظيف المسافات</button>
+      <button onclick="format('upper')">UPPERCASE</button>
+      <button onclick="format('lower')">lowercase</button>
+      <div class="result" id="formatResult" aria-live="polite"></div>
+      <button class="secondary" onclick="copyResult('formatResult')">نسخ النتيجة</button>
+    </section>
+
+    <section class="card" data-name="مولد كلمات عشوائية">
+      <div class="emoji">🎲</div>
+      <h2>مولّد كلمات عشوائية</h2>
+      <p>ولّد كلمات تجريبية عشوائية باستخدام حروف إنجليزية.</p>
+      <label for="wordLength">عدد الحروف:</label>
+      <select id="wordLength">
+        <option value="4">4 حروف</option>
+        <option value="5">5 حروف</option>
+        <option value="6">6 حروف</option>
+        <option value="8">8 حروف</option>
+        <option value="12">12 حرفًا</option>
+      </select>
+      <label for="wordAmount">عدد النتائج:</label>
+      <select id="wordAmount">
+        <option value="5">5 كلمات</option>
+        <option value="10">10 كلمات</option>
+        <option value="20">20 كلمة</option>
+        <option value="50">50 كلمة</option>
+      </select>
+      <button onclick="generateWords()">توليد الكلمات</button>
+      <div class="result" id="wordResult" aria-live="polite"></div>
+      <button class="secondary" onclick="copyResult('wordResult')">نسخ الكلمات</button>
+      <p class="small">الكلمات مولّدة عشوائيًا وليست بالضرورة كلمات قاموسية أو يوزرات متاحة.</p>
+    </section>
+
+    <section class="card" data-name="مولد كلمات مرور آمن">
+      <div class="emoji">🔐</div>
+      <h2>مولّد كلمات المرور</h2>
+      <p>أنشئ كلمة مرور عشوائية على جهازك.</p>
+      <label for="passLength">طول كلمة المرور:</label>
+      <select id="passLength">
+        <option value="12">12 حرفًا</option>
+        <option value="16" selected>16 حرفًا</option>
+        <option value="24">24 حرفًا</option>
+        <option value="32">32 حرفًا</option>
+      </select>
+      <button onclick="generatePassword()">توليد كلمة مرور</button>
+      <div class="result" id="passResult" aria-live="polite"></div>
+      <button class="secondary" onclick="copyResult('passResult')">نسخ كلمة المرور</button>
+      <p class="small">لا تشارك كلمة مرورك مع أحد، واحفظها في مكان موثوق.</p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Jafar Tools — أدوات مجانية للجميع 💜</p>
+  <p class="small">تُنفّذ الأدوات داخل المتصفح. لا نعدك بأرباح أو بتوفر أسماء مستخدمين معينة.</p>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+$("year").textContent = new Date().getFullYear();
+
+$("countText").addEventListener("input", () => {
+  const text = $("countText").value;
+  const words = text.trim() ? text.trim().split(/\s+/u).length : 0;
+  $("countResult").textContent =
+    `الكلمات: ${words} | الحروف مع المسافات: ${text.length}`;
+});
+
+$("search").addEventListener("input", () => {
+  const query = $("search").value.trim().toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.hidden = !card.dataset.name.toLowerCase().includes(query);
+  });
+});
+
+function format(type) {
+  let text = $("formatText").value;
+  if (type === "clean") text = text.trim().replace(/\s+/gu, " ");
+  if (type === "upper") text = text.toUpperCase();
+  if (type === "lower") text = text.toLowerCase();
+  $("formatResult").textContent = text;
+}
+
+function randomIndex(max) {
+  const values = new Uint32Array(1);
+  crypto.getRandomValues(values);
+  return values[0] % max;
+}
+
+function randomString(chars, length) {
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars[randomIndex(chars.length)];
+  }
+  return result;
+}
+
+function generateWords() {
+  const length = Number($("wordLength").value);
+  const amount = Number($("wordAmount").value);
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789_";
+  const words = [];
+
+  for (let i = 0; i < amount; i++) {
+    words.push(randomString(chars, length));
+  }
+
+  $("wordResult").textContent = words.join("\n");
+}
+
+function generatePassword() {
+  const length = Number($("passLength").value);
+  const chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*?";
+  $("passResult").textContent = randomString(chars, length);
+}
+
+async function copyResult(id) {
+  const text = $(id).textContent.trim();
+  if (!text) {
+    alert("ولّد نتيجة أولًا!");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("تم نسخ النتيجة!");
+  } catch {
+    alert("تعذّر النسخ تلقائيًا. حدّد النتيجة وانسخها يدويًا.");
+  }
+}
+</script>
+
+</body>
+</html>
